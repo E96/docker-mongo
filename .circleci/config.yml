@@ -1,0 +1,15 @@
+version: 2
+jobs:
+    build:
+        docker:
+            - image: circleci/docker
+        steps:
+            - checkout
+            - setup_remote_docker_engine
+            - run:
+                name: Build image
+                command: |
+                    TAG_NAME=$(cat 3.6/Dockerfile|head -n1 | awk '{print $2}' | awk -F':' '{print $2}')
+                    docker build -t e96tech/mongo:$TAG_NAME 3.6/
+                    docker tag e96tech/mongo:$TAG_NAME e96tech/mongo:3.6
+                    docker images
